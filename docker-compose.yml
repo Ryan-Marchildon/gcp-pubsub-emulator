@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+
+  # api:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   image: demo-app:latest
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - ./src:/src
+  #   ports:
+  #     - "8000:8000"
+
+  pubsub:
+    image: gcr.io/google.com/cloudsdktool/cloud-sdk:416.0.0-emulators
+    command: gcloud beta emulators pubsub start --project=my-project --host-port=0.0.0.0:8085
+    ports:
+      - 8080:8085
+
+  pubsub-setup:
+    # Runs script to initilize topics and subs, then shuts down.
+    image: demo-app:latest
+    depends_on:
+      - pubsub
+    restart: "no"
+    env_file:
+      - .env
+    volumes:
+      - ./src:/src
+    command: [ "bash", "-c", "/src/scripts/pubsub_emulator_init.sh" ]
+
+  event-consumer-B1:
+    image: demo-app:latest
+    depends_on:
+      - pubsub
+      - pubsub-setup
+    restart: on-failure
+    env_file:
+      - .env
+    volumes:
+      - ./src:/src
+    command: "python /src/pubsub_demo/event_listener.py -s B1"
