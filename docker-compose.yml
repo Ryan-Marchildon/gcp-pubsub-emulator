@@ -2,18 +2,6 @@ version: "3"
 
 services:
 
-  # api:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   image: demo-app:latest
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     - ./src:/src
-  #   ports:
-  #     - "8000:8000"
-
   pubsub:
     image: gcr.io/google.com/cloudsdktool/cloud-sdk:416.0.0-emulators
     command: gcloud beta emulators pubsub start --project=my-project --host-port=0.0.0.0:8085
@@ -31,6 +19,30 @@ services:
     volumes:
       - ./src:/src
     command: [ "bash", "-c", "/src/scripts/pubsub_emulator_init.sh" ]
+
+  api-A:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: demo-app:latest
+    depends_on:
+      - pubsub
+      - pubsub-setup
+    env_file:
+      - .env
+    volumes:
+      - ./src:/src
+    ports:
+      - "8000:8000"
+    command:
+      [
+        "uvicorn",
+        "pubsub_demo.api:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000"
+      ]
 
   event-consumer-B1:
     image: demo-app:latest
