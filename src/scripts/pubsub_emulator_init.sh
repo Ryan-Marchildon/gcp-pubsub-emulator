@@ -3,14 +3,12 @@
 pushd pubsub_demo/utils
 
 # Create topics
-python publisher.py my-project create topic-A-bus
-python publisher.py my-project create topic-B-bus
-python publisher.py my-project create topic-return-bus
+python publisher.py my-project create topic-message-bus
 
 # Create subscriptions
-python subscriber.py my-project create topic-A-bus sub-A-bus
-python subscriber.py my-project create topic-B-bus sub-B-bus
-python subscriber.py my-project create topic-return-bus sub-return-bus
+python subscriber.py my-project create topic-message-bus subscription-A
+python subscriber.py my-project create topic-message-bus subscription-B
+python subscriber.py my-project create topic-message-bus subscription-C
 
 # Make sure pubsub emulator has had enough time to send a reponse back
-sleep 5 # In seconds
+sleep 5 # Unit: seconds
