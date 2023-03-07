@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Callable
 
 from google.cloud import pubsub_v1
-
+from pubsub_demo.utils.database import SqlClient
 from pubsub_demo.utils.pubsub import GooglePubsubClient
 
 
@@ -18,6 +18,24 @@ def get_handler(service_name: str) -> Callable:
 
             if message["type"] == "StampsAdded":
                 print(f"Processing message: {message}")
+
+                # Preproc
+                payload=message["payload"]
+                _request_id = payload["request_id"]
+                _series_num = payload["series_num"]
+                _request_type = payload["request_type"]
+                _stamps = "-".join(payload["stamps"])
+                _delta = datetime.fromisoformat(payload["times"][-1]) - datetime.fromisoformat(payload["times"][0])
+                _runtime_ms = round(_delta.microseconds/1000, 2)
+
+                # Save to db
+                sql = SqlClient()
+                sql.execute(
+                    f"""
+                    INSERT INTO stamps (request_id, series_num, request_type, stamps, runtime_ms)
+                    VALUES ('{_request_id}', {_series_num}, '{_request_type}', '{_stamps}', {_runtime_ms})
+                    """ 
+                ) 
 
     elif service_name.startswith("B"):
         _stamp = service_name

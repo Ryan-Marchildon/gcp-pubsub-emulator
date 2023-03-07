@@ -36,3 +36,13 @@ class StampsApi:
             print(f"Error {resp.status_code}: {resp_body}")
 
         return resp_body
+
+    def delete_stamps(self):
+        url = self.base_url + "/stamps/"
+        print(f"Sending stamp deletion request to {url}.")
+        resp = requests.delete(url)
+        resp_body = resp.json()
+        if resp.status_code != 200:
+            print(f"Error {resp.status_code}: {resp_body}")
+
+        return resp_body

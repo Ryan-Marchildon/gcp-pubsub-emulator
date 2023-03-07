@@ -35,6 +35,13 @@ def retrieve(id: Optional[str] = None):
     click.echo(f"Response: {resp}")
 
 
+@stamps.command()
+def delete():
+    api = StampsApi()
+    resp = api.delete_stamps()
+    click.echo(f"Response: {resp}")
+
+
 def main():
     stamps()
 
