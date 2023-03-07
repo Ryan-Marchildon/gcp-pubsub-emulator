@@ -1,6 +1,6 @@
 # Google Pub/Sub Local Emulator Demo
 
-A sandbox for experimenting with Google Pub/Sub in a local development setup, centered around and asynchronous messaging demo. 
+A sandbox for experimenting with Google Pub/Sub in a local development setup, centered around an asynchronous messaging demo. 
 
 Creates a dedicated pubsub container and demo publisher/subscriber app using docker-compose.
 
