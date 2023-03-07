@@ -1,3 +1,10 @@
+"""
+Unused. Can experiment with templating of
+commands and events. 
+
+"""
+
+
 from dataclasses import dataclass
 from datetime import datetime, date
 import json

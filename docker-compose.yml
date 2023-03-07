@@ -44,6 +44,24 @@ services:
         "8000"
       ]
 
+  event-consumer-A:
+    image: demo-app:latest
+    depends_on:
+      - pubsub
+      - pubsub-setup
+    restart: on-failure
+    env_file:
+      - .env
+    volumes:
+      - ./src:/src
+    command:
+      [
+        "python",
+        "/src/pubsub_demo/event_listener.py",
+        "-s",
+        "A"
+      ]
+
   event-consumer-B1:
     image: demo-app:latest
     depends_on:
@@ -54,4 +72,46 @@ services:
       - .env
     volumes:
       - ./src:/src
-    command: "python /src/pubsub_demo/event_listener.py -s B1"
+    command:
+      [
+        "python",
+        "/src/pubsub_demo/event_listener.py",
+        "-s",
+        "B1"
+      ]
+
+  event-consumer-B2:
+    image: demo-app:latest
+    depends_on:
+      - pubsub
+      - pubsub-setup
+    restart: on-failure
+    env_file:
+      - .env
+    volumes:
+      - ./src:/src
+    command:
+      [
+        "python",
+        "/src/pubsub_demo/event_listener.py",
+        "-s",
+        "B2"
+      ]
+
+  event-consumer-C:
+    image: demo-app:latest
+    depends_on:
+      - pubsub
+      - pubsub-setup
+    restart: on-failure
+    env_file:
+      - .env
+    volumes:
+      - ./src:/src
+    command:
+      [
+        "python",
+        "/src/pubsub_demo/event_listener.py",
+        "-s",
+        "C"
+      ]

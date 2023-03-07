@@ -1,12 +1,15 @@
+import os
 import logging
 from uuid import uuid4
 from typing import Optional
+from datetime import datetime
 
 from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from pubsub_demo.utils.stamps import StampRequest
+from pubsub_demo.utils.pubsub import GooglePubsubClient
 
 
 app = FastAPI()
@@ -50,5 +53,24 @@ async def retrieve_stamps_by_id(id: str):
 async def create_stamp_request(stamp_request: StampRequest):
     if not stamp_request.id:
         stamp_request.id = str(uuid4())[:8]
+
+    project_id = os.getenv("PUBSUB_PROJECT_ID")
+    pubsub = GooglePubsubClient(project_id=project_id)
+
     print(f"Making stamp request: {stamp_request}")
+    request_time = str(datetime.now().isoformat())
+    for series_num in range(stamp_request.num):
+        message = dict(
+            type="AddStamp",
+            payload=dict(
+                to_stamper="B",
+                series_no=series_num + 1,
+                request_id=stamp_request.id,
+                request_type=stamp_request.type,
+                stamps=[],
+                times=[request_time],
+            ),
+        )
+        pubsub.publish_to_topic(topic_id="topic-message-bus", message=message)
+
     return stamp_request.id
