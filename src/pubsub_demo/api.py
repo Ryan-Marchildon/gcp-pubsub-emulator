@@ -84,13 +84,14 @@ async def create_stamp_request(stamp_request: StampRequest):
     project_id = os.getenv("PUBSUB_PROJECT_ID")
     pubsub = GooglePubsubClient(project_id=project_id)
 
-    print(f"Making stamp request: {stamp_request}")
-    for series_num in range(stamp_request.num):
+    num_letters = stamp_request.num
+    print(f"Making stamp request for {num_letters} letters: {stamp_request}")
+    for letter_num in range(num_letters):
         message = dict(
             type="AddStamp",
             payload=dict(
                 to_stamper="B",
-                series_num=series_num + 1,
+                letter_num=letter_num + 1,
                 request_id=stamp_request.id,
                 request_type=stamp_request.type,
                 stamps=[],

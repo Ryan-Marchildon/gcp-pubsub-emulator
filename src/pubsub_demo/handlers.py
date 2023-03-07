@@ -22,7 +22,7 @@ def get_handler(service_name: str) -> Callable:
                 # Preproc
                 payload=message["payload"]
                 _request_id = payload["request_id"]
-                _series_num = payload["series_num"]
+                _letter_num = payload["letter_num"]
                 _request_type = payload["request_type"]
                 _stamps = "-".join(payload["stamps"])
                 _delta = datetime.fromisoformat(payload["times"][-1]) - datetime.fromisoformat(payload["times"][0])
@@ -32,8 +32,8 @@ def get_handler(service_name: str) -> Callable:
                 sql = SqlClient()
                 sql.execute(
                     f"""
-                    INSERT INTO stamps (request_id, series_num, request_type, stamps, runtime_ms)
-                    VALUES ('{_request_id}', {_series_num}, '{_request_type}', '{_stamps}', {_runtime_ms})
+                    INSERT INTO stamps (request_id, letter_num, request_type, stamps, runtime_ms)
+                    VALUES ('{_request_id}', {_letter_num}, '{_request_type}', '{_stamps}', {_runtime_ms})
                     """ 
                 ) 
 

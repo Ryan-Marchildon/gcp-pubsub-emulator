@@ -27,7 +27,7 @@ This sandbox and demo sets us up for experimentation with the following:
 
 ## Description
 
-In this bureaucracy-flavoured demo, a user requests `N` messages to be 'rubber-stamped' by one or more services. The stamped messages land into a database, together with the identity of the 'stampers' and the total transit time. 
+In this bureaucracy-flavoured demo, a user requests `N` letters (messages) to be 'rubber-stamped' by one or more services. After being stamped by all requested stampers, the letters are persisted to a database that tracks the identity of the 'stampers' on each letter and the total transit time for that letter. 
 
 An outline of the communication flow as well as the "short" (one-stamper) and "long" (two-stamper) request paths is displayed below. 
 

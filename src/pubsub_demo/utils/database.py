@@ -33,7 +33,7 @@ def init_db_tables() -> None:
         (
             [entry_id] INTEGER PRIMARY KEY,
             [request_id] STRING NOT NULL, 
-            [series_num] INTEGER NOT NULL,
+            [letter_num] INTEGER NOT NULL,
             [request_type] STRING NOT NULL,
             [stamps] STRING NOT NULL,
             [runtime_ms] FLOAT NOT NULL
